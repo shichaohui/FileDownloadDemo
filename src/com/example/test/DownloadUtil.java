@@ -28,7 +28,7 @@ public class DownloadUtil {
 				downloadedSize += length;
 			}
 			if (onDownloadListener != null) {
-				onDownloadListener.downloadProgress(downloadedSize);
+				onDownloadListener.downloadProgress(downloadedSize, length);
 			}
 			if (downloadedSize >= fileSize) {
 				mDownloadHttpTool.compelete();
@@ -92,6 +92,7 @@ public class DownloadUtil {
 
 	/** 删除当前下载任务 */
 	public void delete() {
+		pause();
 		mDownloadHttpTool.delete();
 	}
 
@@ -108,11 +109,18 @@ public class DownloadUtil {
 
 	/** 下载回调接口 */
 	public interface OnDownloadListener {
-		/** 下载开始回调接口 */
+		/**
+		 * 下载开始回调接口
+		 * @param fileSize 目标文件大小
+		 */
 		public void downloadStart(int fileSize);
 
-		/** 下载进度回调接口 */
-		public void downloadProgress(int downloadedSize);
+		/**
+		 * 下载进度回调接口
+		 * @param downloadedSize 已下载大小
+		 * @param lenth 本次下载大小
+		 */
+		public void downloadProgress(int downloadedSize, int lenth);
 
 		/** 下载结束回调接口 */
 		public void downloadEnd();

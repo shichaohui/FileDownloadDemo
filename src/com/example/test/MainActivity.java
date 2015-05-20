@@ -1,5 +1,9 @@
 package com.example.test;
 
+import java.text.DecimalFormat;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
@@ -21,7 +25,7 @@ public class MainActivity extends FragmentActivity {
 	private TextView total = null;
 
 	private int maxPb = 0;
-
+	
 	private DownloadUtil mDownloadUtil = null;
 
 	@Override
@@ -34,9 +38,10 @@ public class MainActivity extends FragmentActivity {
 		delete = (Button) findViewById(R.id.button_delete);
 		reset = (Button) findViewById(R.id.button_reset);
 		total = (TextView) findViewById(R.id.textView_total);
+		
 		// String urlString = "http://bbra.cn/Uploadfiles/imgs/20110303/fengjin/013.jpg";
 		String urlString = "http://xz.cr173.com/soft1/shenmtwltb.apk";
-		// String urlString = "http://meiriq-file.b0.upaiyun.com/gamesbox-site/bugeitangjiudaodana.apk";
+//		 String urlString = "http://meiriq-file.b0.upaiyun.com/gamesbox-site/bugeitangjiudaodana.apk";
 		String localPath = Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/local";
 		String[] ss = urlString.split("/");
@@ -50,12 +55,33 @@ public class MainActivity extends FragmentActivity {
 				mProgressBar.setMax(fileSize);
 			}
 
+			String text = "已下载%sM / 共%sM \n占比%s  \n下载速度%skb/s";
+			DecimalFormat decimalFormat = new DecimalFormat("#.##"); // 小数格式化
+			Timer timer = null;
+			String kbps = "0"; // 每秒下载速度
+			int size = 0; // 一秒钟累计下载量
+			
 			@Override
-			public void downloadProgress(int downloadedSize) {
+			public void downloadProgress(int downloadedSize, int length) {
 				mProgressBar.setProgress(downloadedSize);
-				total.setText(downloadedSize + "\u0008/\u0008" + maxPb
-						+ "\u0008\u0008\u0008\u0008" + (int) downloadedSize
-						* 100 / maxPb + "%");
+				total.setText(String.format(text,
+						decimalFormat.format(downloadedSize / 1024.0 / 1024.0),
+						decimalFormat.format(maxPb / 1024.0 / 1024.0),
+						(int) (((float) downloadedSize / (float) maxPb) * 100) + "%",
+						kbps));
+				size += length;
+				
+				if (timer == null) {
+					timer = new Timer();
+					timer.schedule(new TimerTask() {
+						
+						@Override
+						public void run() {
+							kbps = decimalFormat.format(size / 1024.0);
+							size = 0;
+						}
+					}, 0, 1000);
+				}
 			}
 
 			@Override
