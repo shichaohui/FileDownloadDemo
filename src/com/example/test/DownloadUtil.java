@@ -75,7 +75,7 @@ public class DownloadUtil {
 			protected void onPostExecute(Void result) {
 				super.onPostExecute(result);
 				fileSize = mDownloadHttpTool.getFileSize();
-				downloadedSize = mDownloadHttpTool.getCompeleteSize();
+				downloadedSize = mDownloadHttpTool.getTotalCompeleteSize();
 				if (onDownloadListener != null) {
 					onDownloadListener.downloadStart(fileSize);
 				}

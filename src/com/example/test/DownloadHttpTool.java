@@ -36,7 +36,7 @@ public class DownloadHttpTool {
 
 	private Download_State state = Download_State.Ready; // 当前下载状态
 
-	private int globalCompelete = 0;// 所有线程已下载的总数
+	private int totalCompelete = 0;// 所有线程已下载的总数
 
 	/**
 	 * 
@@ -67,7 +67,7 @@ public class DownloadHttpTool {
 
 	/** 在开始下载之前需要调用ready方法进行配置 */
 	public void ready() {
-		globalCompelete = 0;
+		totalCompelete = 0;
 		downloadInfos = sqlTool.getInfos(urlstr);
 		if (downloadInfos.size() == 0) {
 			initFirst();
@@ -80,7 +80,7 @@ public class DownloadHttpTool {
 				fileSize = downloadInfos.get(downloadInfos.size() - 1)
 						.getEndPos();
 				for (DownloadInfo info : downloadInfos) {
-					globalCompelete += info.getCompeleteSize();
+					totalCompelete += info.getCompeleteSize();
 				}
 			}
 		}
@@ -127,8 +127,15 @@ public class DownloadHttpTool {
 	}
 
 	/** 获取当前下载的大小 */
-	public int getCompeleteSize() {
-		return globalCompelete;
+	public int getTotalCompeleteSize() {
+		return totalCompelete;
+	}
+	
+	/** 累加当前下载的大小 */
+	private void setTotalCompeleteSize(int length) {
+		synchronized (this) { // 加锁保证已下载的正确性
+			totalCompelete += length;
+		}
 	}
 
 	/** 第一次下载时进行的初始化 */
@@ -185,7 +192,6 @@ public class DownloadHttpTool {
 		private int endPos = 0; // 在文件中的结束的位置
 		private int compeleteSize = 0; // 已完成下载的大小
 		private String urlstr = ""; // 下载地址
-		private int totalThreadSize = 0; // 所有线程的总大小
 
 		/**
 		 * 
@@ -200,7 +206,6 @@ public class DownloadHttpTool {
 			this.threadId = threadId;
 			this.startPos = startPos;
 			this.endPos = endPos;
-			totalThreadSize = endPos - startPos + 1;
 			this.urlstr = urlstr;
 			this.compeleteSize = compeleteSize;
 		}
@@ -232,9 +237,8 @@ public class DownloadHttpTool {
 					message.obj = urlstr;
 					message.arg1 = length;
 					mHandler.sendMessage(message);
-					// 满足以下条件时跳出循环
-					if (compeleteSize >= totalThreadSize // 已下载量不小于总需下载量(当前线程下载完成)
-							|| state != Download_State.Downloading) { // 非正在下载状态
+					// 非正在下载状态时跳出循环
+					if (state != Download_State.Downloading) {
 						break;
 					}
 				}
