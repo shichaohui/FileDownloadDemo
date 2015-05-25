@@ -89,7 +89,12 @@ public class DownloadUtil {
 	public void pause() {
 		mDownloadHttpTool.pause();
 	}
-
+	
+	/** 恢复当前下载任务 */
+	public void resume() {
+		start();
+	}
+	
 	/** 删除当前下载任务 */
 	public void delete() {
 		pause();

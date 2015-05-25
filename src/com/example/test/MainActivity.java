@@ -20,6 +20,7 @@ public class MainActivity extends FragmentActivity {
 	private ProgressBar mProgressBar = null;
 	private Button start = null;
 	private Button pause = null;
+	private Button resume = null;
 	private Button delete = null;
 	private Button reset = null;
 	private TextView total = null;
@@ -35,6 +36,7 @@ public class MainActivity extends FragmentActivity {
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
 		start = (Button) findViewById(R.id.button_start);
 		pause = (Button) findViewById(R.id.button_pause);
+		resume = (Button) findViewById(R.id.button_resume);
 		delete = (Button) findViewById(R.id.button_delete);
 		reset = (Button) findViewById(R.id.button_reset);
 		total = (TextView) findViewById(R.id.textView_total);
@@ -100,6 +102,13 @@ public class MainActivity extends FragmentActivity {
 			@Override
 			public void onClick(View arg0) {
 				mDownloadUtil.pause();
+			}
+		});
+		resume.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				mDownloadUtil.resume();
 			}
 		});
 		delete.setOnClickListener(new OnClickListener() {
