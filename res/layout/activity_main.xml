@@ -1,67 +1,12 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="30dp" >
+    android:orientation="vertical" >
 
-    <ProgressBar
-        android:id="@+id/progressBar1"
-        style="?android:attr/progressBarStyleHorizontal"
+    <ListView 
+        android:id="@+id/listview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/textView_total"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/progressBar1"
-        android:layout_margin="10dp"
-        android:lines="3"
-        android:text="下载进度" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView_total" >
-
-        <Button
-            android:id="@+id/button_start"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="开始"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/button_pause"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="暂停"
-            android:textSize="12sp" />
-        <Button
-            android:id="@+id/button_resume"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="继续"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/button_delete"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="删除"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/button_reset"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="重新下载"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>

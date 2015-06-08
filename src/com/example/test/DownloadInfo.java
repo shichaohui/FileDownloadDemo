@@ -2,6 +2,8 @@ package com.example.test;
 
 /**
  * 保存每个下载线程下载信息类
+ * 
+ * @author shichaohui@meiriq.com
  */
 public class DownloadInfo {
 

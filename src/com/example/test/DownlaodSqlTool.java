@@ -7,16 +7,32 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * 
  * 数据库操作工具类
+ * 
+ * @author shichaohui@meiriq.com
  */
 public class DownlaodSqlTool {
+	
+	private static DownlaodSqlTool instance = null;
 	private DownLoadHelper dbHelper = null;
 
-	public DownlaodSqlTool(Context context) {
+	private DownlaodSqlTool(Context context) {
 		dbHelper = new DownLoadHelper(context);
 	}
 
+	private static synchronized void syncInit(Context context) {
+		if (instance == null) {
+			instance = new DownlaodSqlTool(context);
+		}
+	}
+
+	public static DownlaodSqlTool getInstance(Context context) {
+		if (instance == null) {
+			syncInit(context);
+		}
+		return instance;
+	}
+	
 	/** 将下载的进度等信息保存到数据库 */
 	public void insertInfos(List<DownloadInfo> infos) {
 		SQLiteDatabase database = dbHelper.getWritableDatabase();
@@ -40,6 +56,7 @@ public class DownlaodSqlTool {
 					cursor.getString(4));
 			list.add(info);
 		}
+		cursor.close();
 		return list;
 	}
 

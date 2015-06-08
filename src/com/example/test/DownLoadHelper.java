@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * 利用数据库来记录下载信息
+ * 
+ * @author shichaohui@meiriq.com
  */
 public class DownLoadHelper extends SQLiteOpenHelper {
 
